@@ -6,7 +6,7 @@ source /etc/os-release
 case "$ID" in
 "opensuse-tumbleweed") INSTALLER="/usr/bin/zypper --non-interactive in" ;;
 "fedora") INSTALLER="/usr/bin/dnf install -y" ;;
-"ubuntu") INSTALLER="/usr/bin/apt install -y" ;;
+"ubuntu" | "debian") INSTALLER="/usr/bin/apt install -y" ;;
 esac
 
 #Install Needed Software
