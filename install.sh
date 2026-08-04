@@ -2,30 +2,64 @@
 ## Source the OS release information file
 source /etc/os-release
 
-## Make sure the installer variable points to the right installer for the OS we are running on
-case "$ID" in
-"opensuse-tumbleweed") INSTALLER="/usr/bin/zypper --non-interactive in" ;;
-"fedora") INSTALLER="/usr/bin/dnf install -y" ;;
-"ubuntu" | "debian") INSTALLER="/usr/bin/apt install -y" ;;
-esac
+function help {
+  echo -e "\x1b[1;32mMartins Installer and PC Setup\x1b[1;34m"
+  echo -e "\r"
+  echo " -e - install everything"
+  echo " -a - Install apps only"
+  echo -e " -c - clone configuration"
+  echo -e " -h - Help\x1b[0m"
+  echo -e "\r\r"
+  return 0
+}
 
-#Install Needed Software
-# If running on Fedora then setup copr repo
-if [[ $ID = "fedora" ]]; then
-  if [[ ! -f /etc/yum.repos.d/_copr:copr.fedorainfracloud.org:atim:starship.repo ]]; then
-    sudo dnf copr enable atim/starship
+function install-apps {
+
+  #sourcing this file gives me environment variables about the installed operating system
+  source /etc/os-release
+
+  # check the ID of the installed operating system and set installer as required
+  case "$ID" in
+  "opensuse-tumbleweed") INSTALLER="/usr/bin/zypper --non-interactive in" ;;
+  "fedora") INSTALLER="/usr/bin/dnf install -y" ;;
+  "ubuntu" | "debian") INSTALLER="/usr/bin/apt install -y" ;;
+  esac
+  # If running on Fedora then setup copr repo
+  if [[ $ID = "fedora" ]]; then
+    if [[ ! -f /etc/yum.repos.d/_copr:copr.fedorainfracloud.org:atim:starship.repo ]]; then
+      sudo dnf copr enable atim/starship
+    fi
   fi
+  sudo $INSTALLER eza grc starship stow git zsh neovim gcc
+}
+
+function install-config {
+  clear #Change User Shel
+  echo "Enter user password to change shell"
+  chsh -s /usr/bin/zsh
+  # clone and install dotfiles
+  cd ~
+  git clone https://github.com/martinjh99/dotfiles .dotfiles
+  cd ~/.dotfiles
+  stow -v .
+  cd ~
+  #Install LazyVim configuration for Neovim
+  git clone https://github.com/martinjh99/starter .config/nvim
+}
+
+if [ -z "$1" ]; then
+  echo "No argument supplied"
 fi
 
-sudo $INSTALLER eza grc starship stow git zsh neovim gcc
-#Change User Shell
-echo "Enter user password to change shell"
-chsh -s /usr/bin/zsh
-# clone and install dotfiles
-cd ~
-git clone https://github.com/martinjh99/dotfiles .dotfiles
-cd ~/.dotfiles
-stow -v .
-cd ~
-#Install LazyVim configuration for Neovim
-git clone https://github.com/martinjh99/starter .config/nvim
+while getopts "aceh" opt; do
+  case $opt in
+  e)
+    install-apps
+    install-config
+    ;;
+  c) install-config ;;
+  a) install-apps ;;
+  h) help ;;
+  *) echo "Invalid Flags" ;;
+  esac
+done
