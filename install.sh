@@ -1,6 +1,5 @@
 #!/bin/bash
 ## Source the OS release information file
-source /etc/os-release
 
 function help {
   echo -e "\x1b[1;32mMartins Installer and PC Setup\x1b[1;34m"
