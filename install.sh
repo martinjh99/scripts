@@ -62,3 +62,4 @@ while getopts "aceh" opt; do
   *) echo "Invalid Flags" ;;
   esac
 done
+help
