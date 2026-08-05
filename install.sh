@@ -19,9 +19,18 @@ function install-apps {
 
   # check the ID of the installed operating system and set installer as required
   case "$ID" in
-  "opensuse-tumbleweed") INSTALLER="/usr/bin/zypper --non-interactive in" ;;
-  "fedora") INSTALLER="/usr/bin/dnf install -y" ;;
-  "ubuntu" | "debian") INSTALLER="/usr/bin/apt install -y" ;;
+  "opensuse-tumbleweed")
+    INSTALLER="/usr/bin/zypper --non-interactive in"
+    APPS="eza grc starship stow git zsh neovim gcc"
+    ;;
+  "fedora")
+    INSTALLER="/usr/bin/dnf install -y"
+    APPS="eza grc starship stow git zsh neovim gcc"
+    ;;
+  "ubuntu")
+    INSTALLER="/usr/bin/apt install -y"
+    APPS="eza grc stow git zsh neovim gcc"
+    ;;
   esac
   # If running on Fedora then setup copr repo
   if [[ $ID = "fedora" ]]; then
@@ -29,7 +38,7 @@ function install-apps {
       sudo dnf copr enable atim/starship
     fi
   fi
-  sudo $INSTALLER eza grc starship stow git zsh neovim gcc
+  sudo $INSTALLER $APPS
 }
 
 function install-config {
