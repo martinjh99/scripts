@@ -38,11 +38,12 @@ function install-apps {
       sudo dnf copr enable atim/starship
     fi
   fi
-  sudo $INSTALLER $APPS
+  sudo $INSTALLER "$APPS"
 }
 
 function install-config {
-  clear #Change User Shel
+  source /etc/os-release
+  clear #Change User shell
   echo "Enter user password to change shell"
   chsh -s /usr/bin/zsh
   # clone and install dotfiles
@@ -71,4 +72,3 @@ while getopts "aceh" opt; do
   *) echo "Invalid Flags" ;;
   esac
 done
-help
