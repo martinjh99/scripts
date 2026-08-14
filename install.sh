@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
-## Source the OS release information file
+
+#############################################
+# Script to install apps and configurations #
+#############################################
 
 function help {
   echo -e "\x1b[1;32mMartins Installer and PC Setup\x1b[1;34m"
@@ -32,10 +35,11 @@ function install-apps {
     APPS="eza grc stow git zsh neovim gcc"
     ;;
   *)
-      dialog --clear \
-    --title "Error" \
-    --msgbox "You are running on an unspported operating system" 0 0
-    return
+    dialog --clear \
+      --title "Error" \
+      --msgbox "You are running on an unspported operating system" 0 0
+    return # How do I stop the sccript from executing here after printing the dialog message?
+
     ;;
 
   esac
