@@ -31,6 +31,11 @@ function install-apps {
     INSTALLER="/usr/bin/apt install -y"
     APPS="eza grc stow git zsh neovim gcc"
     ;;
+  *)
+    echo "Sorry you are running on an un-supported operating system"
+    return
+    ;;
+
   esac
   # If running on Fedora then setup copr repo
   if [[ $ID = "fedora" ]]; then
