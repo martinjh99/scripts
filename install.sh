@@ -57,7 +57,24 @@ function install-config {
 }
 
 if [ -z "$1" ]; then
-  echo "No argument supplied"
+  CHOICE=$(dialog --clear \
+    --backtitle "Martins Installer 0.5-dialog" \
+    --title "Main Menu" \
+    --menu "Please select an option: " 0 0 4 \
+    1 "Install Everything" \
+    2 "Install Apps Only" \
+    3 "Clone Configurations and change shell" \
+    2>&1 >/dev/tty)
+  #    echo $CHOICE
+  case $CHOICE in
+  "1")
+    install-apps
+    install-config
+    ;;
+  "2") install-apps ;;
+  "3") install-config ;;
+  esac
+
 fi
 
 while getopts "aceh" opt; do
