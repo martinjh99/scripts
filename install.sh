@@ -38,7 +38,7 @@ function install-apps {
       sudo dnf copr enable atim/starship
     fi
   fi
-  sudo $INSTALLER "$APPS"
+  sudo $INSTALLER $APPS
 }
 
 function install-config {
