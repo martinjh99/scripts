@@ -32,7 +32,9 @@ function install-apps {
     APPS="eza grc stow git zsh neovim gcc"
     ;;
   *)
-    echo "Sorry you are running on an un-supported operating system"
+      dialog --clear \
+    --title "Error" \
+    --msgbox "You are running on an unspported operating system" 0 0
     return
     ;;
 
@@ -52,11 +54,11 @@ function install-config {
   echo "Enter user password to change shell"
   chsh -s /usr/bin/zsh
   # clone and install dotfiles
-  cd ~
+  cd ~ || return
   git clone https://github.com/martinjh99/dotfiles .dotfiles
-  cd ~/.dotfiles
+  cd ~/.dotfiles || return
   stow -v .
-  cd ~
+  cd ~ || return
   #Install LazyVim configuration for Neovim
   git clone https://github.com/martinjh99/starter .config/nvim
 }
