@@ -16,14 +16,10 @@ function help {
 }
 
 function install-apps {
-
-  #sourcing this file gives me environment variables about the installed operating system
-  source /etc/os-release
   INSTALLER="/usr/bin/zypper --non-interactive in"
   APPS="eza grc starship stow git zsh neovim gcc"
   sudo $INSTALLER $APPS
 }
-
 function install-config {
   clear #Change User shell
   echo "Enter user password to change shell"
@@ -40,7 +36,7 @@ function install-config {
 
 if [ -z "$1" ]; then
   CHOICE=$(dialog --clear \
-    --backtitle "Martins Installer 0.5-dialog" \
+    --backtitle "Martins Installer 1.0" \
     --title "Main Menu" \
     --menu "Please select an option: " 0 0 4 \
     1 "Install Everything" \
