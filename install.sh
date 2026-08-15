@@ -1,8 +1,5 @@
-#!/usr/bin/env bash
-
-#############################################
-# Script to install apps and configurations #
-#############################################
+#!/bin/bash
+## Source the OS release information file
 
 function help {
   echo -e "\x1b[1;32mMartins Installer and PC Setup\x1b[1;34m"
@@ -16,27 +13,52 @@ function help {
 }
 
 function install-apps {
-  INSTALLER="/usr/bin/zypper --non-interactive in"
-  APPS="eza grc starship stow git zsh neovim gcc"
+
+  #sourcing this file gives me environment variables about the installed operating system
+  source /etc/os-release
+
+  # check the ID of the installed operating system and set installer as required
+  case "$ID" in
+  "opensuse-tumbleweed")
+    INSTALLER="/usr/bin/zypper --non-interactive in"
+    APPS="eza grc starship stow git zsh neovim gcc"
+    ;;
+  "fedora")
+    INSTALLER="/usr/bin/dnf install -y"
+    APPS="eza grc starship stow git zsh neovim gcc"
+    ;;
+  "ubuntu")
+    INSTALLER="/usr/bin/apt install -y"
+    APPS="eza grc stow git zsh neovim gcc"
+    ;;
+  esac
+  # If running on Fedora then setup copr repo
+  if [[ $ID = "fedora" ]]; then
+    if [[ ! -f /etc/yum.repos.d/_copr:copr.fedorainfracloud.org:atim:starship.repo ]]; then
+      sudo dnf copr enable atim/starship
+    fi
+  fi
   sudo $INSTALLER $APPS
 }
+
 function install-config {
+  source /etc/os-release
   clear #Change User shell
   echo "Enter user password to change shell"
   chsh -s /usr/bin/zsh
   # clone and install dotfiles
-  cd ~ || return
+  cd ~
   git clone https://github.com/martinjh99/dotfiles .dotfiles
-  cd ~/.dotfiles || return
+  cd ~/.dotfiles
   stow -v .
-  cd ~ || return
+  cd ~
   #Install LazyVim configuration for Neovim
   git clone https://github.com/martinjh99/starter .config/nvim
 }
 
 if [ -z "$1" ]; then
   CHOICE=$(dialog --clear \
-    --backtitle "Martins Installer 1.0" \
+    --backtitle "Martins Installer 0.5-dialog" \
     --title "Main Menu" \
     --menu "Please select an option: " 0 0 4 \
     1 "Install Everything" \
