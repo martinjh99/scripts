@@ -23,11 +23,11 @@ function install-config {
   echo "Enter user password to change shell"
   chsh -s /usr/bin/zsh
   # clone and install dotfiles
-  cd ~
+  cd ~ || exit
   git clone https://github.com/martinjh99/dotfiles .dotfiles
-  cd ~/.dotfiles
+  cd ~/.dotfile || exit
   stow -v .
-  cd ~
+  cd ~ || exit
   #Install LazyVim configuration for Neovim
   git clone https://github.com/martinjh99/starter .config/nvim
 }
