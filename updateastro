@@ -1,16 +1,14 @@
 #!/bin/zsh
 
 function runCommand() {
-  for d in /home/martin/astro/*/ ; do
-    cd $d 
-    if [[ -a .updateme ]] ; then
-      echo "$d"
-      /bin/zsh -c "$@"
-    fi     
-  done
-    
+	for d in /home/martin/astro/*/; do
+		cd $d
+		if [[ -e .updateme ]]; then
+			echo "$d"
+			/bin/zsh -c "$@"
+		fi
+	done
+
 }
 
 runCommand "npx @astrojs/upgrade"
-
-
