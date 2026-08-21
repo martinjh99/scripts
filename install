@@ -24,7 +24,7 @@ function install-config {
   # clone and install dotfiles
   cd ~ || exit
   git clone https://github.com/martinjh99/dotfiles .dotfiles
-  cd ~/.dotfile || exit
+  cd ~/.dotfiles || exit
   stow -v .
   cd ~ || exit
   #Install LazyVim configuration for Neovim
