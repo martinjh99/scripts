@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 function help {
   echo -e "\x1b[1;32mMartins Installer and PC Setup\x1b[1;34m"
